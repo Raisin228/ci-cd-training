@@ -15,6 +15,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // Запуск отчёта после тестов
 }
 
 tasks.withType(JavaCompile) {
@@ -23,4 +24,16 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Test) {
     systemProperty "file.encoding", "UTF-8"
+}
+jacoco {
+    toolVersion = '0.8.10' // Версия плагина JaCoCo
+}
+
+tasks.jacocoTestReport {
+    dependsOn test // Отчёт создаётся после выполнения тестов
+
+    reports {
+        xml.required = true // Генерация XML-отчёта для CI/CD
+        html.required = true // Генерация HTML-отчёта для локального просмотра
+    }
 }
